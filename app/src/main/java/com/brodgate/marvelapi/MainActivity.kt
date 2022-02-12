@@ -7,6 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.brodgate.marvelapi.ui.theme.MainContainer
 import com.brodgate.marvelapi.ui.theme.MarvelApiTheme
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.take
 
 class MainActivity : ComponentActivity() {
 
