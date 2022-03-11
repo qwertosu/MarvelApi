@@ -16,7 +16,7 @@ data class Character(
     @SerialName("copyright")
     val copyright: String?,
     @SerialName("data")
-    val `data`: Data?,
+    val data : Data?,
     @SerialName("etag")
     val etag: String?,
     @SerialName("status")
@@ -40,27 +40,27 @@ data class Data(
 @Serializable
 data class Result(
     @SerialName("comics")
-    val comics: Comics?,
+    val comics: Comics? = null,
     @SerialName("description")
-    val description: String?,
+    val description: String? = null,
     @SerialName("events")
-    val events: Events?,
+    val events: Events? = null,
     @SerialName("id")
-    val id: Int?,
+    val id: Int? = null,
     @SerialName("modified")
-    val modified: String?,
+    val modified: String? = null,
     @SerialName("name")
-    val name: String?,
+    val name: String? = null,
     @SerialName("resourceURI")
-    val resourceURI: String?,
+    val resourceURI: String? = null,
     @SerialName("series")
-    val series: Series?,
+    val series: Series? = null,
     @SerialName("stories")
-    val stories: Stories?,
+    val stories: Stories? = null,
     @SerialName("thumbnail")
-    val thumbnail: Thumbnail?,
+    val thumbnail: Thumbnail? = null,
     @SerialName("urls")
-    val urls: List<Url>?
+    val urls: List<Url>? = null
 )
 
 @Serializable

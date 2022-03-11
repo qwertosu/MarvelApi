@@ -59,13 +59,20 @@ dependencies {
     implementation ComposeDependencies.INSTANCE.material
     implementation ComposeDependencies.INSTANCE.ui_tool_preview
     implementation ComposeDependencies.INSTANCE.activity
+    implementation ComposeDependencies.INSTANCE.navigation
+    implementation ComposeDependencies.INSTANCE.navigation_lifecycle
+    implementation ComposeDependencies.INSTANCE.coil
+
 
     implementation Ktor.INSTANCE.client_android
     implementation Ktor.INSTANCE.client_serialization
     implementation Ktor.INSTANCE.client_logging
-    implementation Ktor.INSTANCE.client_logging
+    implementation Ktor.INSTANCE.serialization
+    implementation Ktor.INSTANCE.content_negotiation
+    implementation Ktor.INSTANCE.serialization_kotlinx_json
 
     implementation Kotlin.INSTANCE.serialization_json
+
 
 
 

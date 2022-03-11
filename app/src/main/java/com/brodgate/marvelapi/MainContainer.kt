@@ -1,11 +1,21 @@
-package com.brodgate.marvelapi.ui.theme
+package com.brodgate.marvelapi
 
-import androidx.compose.material.Scaffold
+import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.brodgate.marvelapi.ui.charecters.core.NavigationGraph
+import com.brodgate.marvelapi.ui.charecters.details.CharacterListViewModel
+import com.brodgate.marvelapi.ui.charecters.details.CharactersScreen
+
 
 @Composable
-fun MainContainer() {
-    Scaffold {
-
+fun MainContainer(context: Context, viewModel: CharacterListViewModel) {
+    val navController = rememberNavController()
+    NavHost(navController, startDestination = NavigationGraph.Route.CHARACTERS_LIST) {
+        composable(route = NavigationGraph.Route.CHARACTERS_LIST) {
+            CharactersScreen(context, navController, viewModel)
+        }
     }
 }

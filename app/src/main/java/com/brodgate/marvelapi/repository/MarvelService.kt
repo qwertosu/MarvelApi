@@ -1,27 +1,37 @@
 package com.brodgate.marvelapi.repository
 
-import android.util.Log
 import io.ktor.client.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
-import io.ktor.client.features.logging.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.json.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.serialization.json.Json
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.serializer
+
 
 object MarvelService {
 
     private val tag = MarvelService::class.java.name
     private val baseUrl = "gateway.marvel.com"
-    private val json = Json {
-        encodeDefaults = true
-        ignoreUnknownKeys =true
-    }
+//    private val json = Json {
+//        encodeDefaults = true
+//        ignoreUnknownKeys =true
+//    }
 
     val httpClient = HttpClient{
-        install(JsonFeature){
-            serializer = KotlinxSerializer(json)
+        install(ContentNegotiation){
+           json(kotlinx.serialization.json.Json {
+               prettyPrint = true
+               isLenient = true
+               ignoreUnknownKeys = true
+               encodeDefaults = true
+           })
+        }
+        install(HttpRequestRetry){
+            retryOnException(maxRetries = 5)
+            retryOnServerErrors(maxRetries = 5)
         }
         install(Logging){
             logger = object : Logger{
@@ -36,9 +46,10 @@ object MarvelService {
             requestTimeoutMillis = 30_000
             connectTimeoutMillis = 30_000
         }
+        install(HttpRequestRetry)
         defaultRequest {
-            contentType(ContentType.Application.Json)
-            accept(ContentType.Application.Json)
+            contentType(Json)
+            accept(Json)
             host = baseUrl
             url {
                 protocol = URLProtocol.HTTPS

@@ -1,11 +1,9 @@
 package com.brodgate.marvelapi
 
-import com.brodgate.marvelapi.repository.CharacterDataManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.brodgate.marvelapi.repository.CharacterApiDataManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.withContext
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -24,8 +22,10 @@ class ExampleUnitTest {
     @Test
     fun getCharacters(){
         runBlocking {
-            val data = CharacterDataManager.getCharacters()
-            assert(data.code==200)
+            withContext(Dispatchers.IO){
+                val data = CharacterApiDataManager().getCharacters()
+                assert(data.code==200)
+            }
         }
     }
 }

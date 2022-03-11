@@ -10,15 +10,16 @@ object Versions {
     val compose_material = compose_version
     val compose_ui_tooling_preview = compose_version
     val activity_compose = "1.4.0"
+    val compose_navigation = "2.4.1"
+
+    val coil_version = "1.4.0"
 
 
     //Lifecycle
     val lifecycle_runtime_ktx = "2.4.0"
 
     //Network
-    val ktor_client_android = "1.5.0"
-    val ktor_client_serialization = "1.5.0"
-    val ktor_client_logging_jvm = "1.5.0"
+    val ktor_version = "2.0.0-beta-1"
 
     //DTO
     val kotlinx_serialization_json = "1.1.0"
@@ -44,13 +45,20 @@ object ComposeDependencies {
     val ui_tool_preview =
         "androidx.compose.ui:ui-tooling-preview:${Versions.compose_ui_tooling_preview}"
     val activity = "androidx.activity:activity-compose:${Versions.activity_compose}"
+    val navigation = "androidx.navigation:navigation-compose:${Versions.compose_navigation}"
+    val navigation_lifecycle = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.compose_navigation}"
+    val coil = "io.coil-kt:coil-compose:${Versions.coil_version}"
 }
 
 object Ktor {
-    val client_android = "io.ktor:ktor-client-android:${Versions.ktor_client_android}"
+    val client_android = "io.ktor:ktor-client-android:${Versions.ktor_version}"
     val client_serialization =
-        "io.ktor:ktor-client-serialization:${Versions.ktor_client_serialization}"
-    val client_logging = "io.ktor:ktor-client-logging-jvm:${Versions.ktor_client_logging_jvm}"
+        "io.ktor:ktor-client-serialization:${Versions.ktor_version}"
+    val client_logging = "io.ktor:ktor-client-logging-jvm:${Versions.ktor_version}"
+    val core = "io.ktor:ktor-client-core:${Versions.ktor_version}"
+    val serialization = "io.ktor:ktor-serialization:${Versions.ktor_version}"
+    val content_negotiation = "io.ktor:ktor-client-content-negotiation:${Versions.ktor_version}"
+    val serialization_kotlinx_json = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor_version}"
 }
 
 object Kotlin {
@@ -62,12 +70,12 @@ object Test {
     val junit = "junit:junit:${Versions.junit}"
 }
 
-object AndroidTest{
+object AndroidTest {
     val androidx_junit = "androidx.test.ext:junit:${Versions.test_ext_junit}"
     val test_espresso_core = "androidx.test.espresso:espresso-core:${Versions.test_espresso_core}"
 }
 
-object Debug{
+object Debug {
     val compose_ui_tooling = "androidx.compose.ui:ui-tooling:${Versions.compose_ui_tooling_test}"
 }
 
