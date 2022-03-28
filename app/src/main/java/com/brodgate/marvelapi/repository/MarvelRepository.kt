@@ -15,9 +15,9 @@ class MarvelRepository {
     private val _resultState = MutableStateFlow<ResultState>(ResultState.Idle)
     val resultState = _resultState.asStateFlow()
 
-    suspend fun getCharacters() {
+    suspend fun getCharacters(offset : Int = 0) {
         withContext(Dispatchers.IO) {
-            val charactersData = characterApiDataManager.getCharacters()
+            val charactersData = characterApiDataManager.getCharacters(offset)
             val results = charactersData.data?.results
             _resultState.update { ResultState.ResultSuccess(results) }
         }

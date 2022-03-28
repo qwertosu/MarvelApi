@@ -17,7 +17,7 @@ class CharacterApiDataManager {
         const val characterPath = "v1/public/characters"
     }
 
-    suspend fun getCharacters(): Character = coroutineScope {
+    suspend fun getCharacters(offset : Int = 0): Character = coroutineScope {
         MarvelService.httpClient.use {
             val data = it.get(characterPath) {
                 headers {
@@ -27,7 +27,7 @@ class CharacterApiDataManager {
                 parameter("hash", hash)
                 parameter("ts", "1")
                 parameter("limit", "100")
-                parameter("offset", "4")
+                parameter("offset", "$offset")
             }.body<Character>()
             return@coroutineScope data
         }

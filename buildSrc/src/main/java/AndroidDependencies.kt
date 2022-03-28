@@ -12,7 +12,7 @@ object Versions {
     val activity_compose = "1.4.0"
     val compose_navigation = "2.4.1"
 
-    val coil_version = "1.4.0"
+    val coil_version = "2.0.0-rc01"
 
 
     //Lifecycle

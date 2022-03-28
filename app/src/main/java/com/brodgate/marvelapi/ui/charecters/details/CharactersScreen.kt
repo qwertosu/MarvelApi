@@ -1,8 +1,11 @@
 package com.brodgate.marvelapi.ui.charecters.details
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.Image
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,25 +16,31 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.brodgate.marvelapi.R
+import com.brodgate.marvelapi.dpToSp
 import com.brodgate.marvelapi.model.Result
-import kotlinx.coroutines.flow.collect
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CharactersScreen(
     context: Context,
@@ -41,7 +50,8 @@ fun CharactersScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val characters = remember { mutableStateListOf<Result>() }
-    val lifecycleState = rememberUpdatedState(lifecycleOwner)
+    var isLoading by remember { mutableStateOf(false) }
+
     LaunchedEffect("effects") {
         viewModel.viewState.collect {
             when (it) {
@@ -49,7 +59,7 @@ fun CharactersScreen(
 
                 }
                 is CharacterViewState.IsLoading -> {
-
+                    isLoading = it.isLoading
                 }
                 is CharacterViewState.ShowMessage -> {
                     val message = it.message
@@ -64,31 +74,49 @@ fun CharactersScreen(
         }
     }
 
-//    DisposableEffect(lifecycleState.value) {
-//        val lifecycle = lifecycleState.value.lifecycle
-//        val observer = LifecycleEventObserver { owner, event ->
-//            when (event) {
-//                Lifecycle.Event.ON_RESUME -> {
-//                    viewModel.getCharacters()
-//                }
-//                else -> {}
-//            }
-//        }
-//        lifecycle.addObserver(observer)
-//        onDispose { lifecycle.removeObserver(observer) }
-//    }
-
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             TopBar(viewModel)
         }
     ) {
-        LazyColumn {
-            items(characters) { item ->
-                CharacterRow(item)
+        val firstCharMap = characters.groupBy { it.name?.first() }
+        if (isLoading.not()) {
+            AnimatedVisibility (visible = isLoading.not()) {
+                LazyColumn {
+                    firstCharMap.forEach { (initial, groupedChars) ->
+                        stickyHeader {
+                            Text(
+                                text = "SECTION: $initial",
+                                color = Color.White,
+                                modifier = Modifier
+                                    .background(color = Color.Black)
+                                    .padding(8.dp)
+                                    .fillMaxWidth()
+                            )
+                        }
+                        items(groupedChars) { item ->
+                            CharacterRow(item)
+                        }
+                    }
+                }
             }
+        }else{
+            LoadingScreen()
         }
+    }
+}
+
+@Composable
+fun LoadingScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xff21282d)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(color = Color.White)
     }
 }
 
@@ -107,28 +135,64 @@ class CharacterParams : PreviewParameterProvider<Result> {
 @Preview
 @Composable
 fun CharacterRow(@PreviewParameter(CharacterParams::class) item: Result) {
-    Row(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(R.drawable.kotlin),
-            contentDescription = "character",
-            contentScale = ContentScale.Crop,
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 1.dp, start = 3.dp, end = 3.dp)
+    ) {
+        Row(
             modifier = Modifier
-                .padding(top = 5.dp, start = 5.dp)
-                .size(64.dp)
-                .clip(CircleShape)
-                .border(2.dp, Color.Blue, CircleShape)
-        )
-        Column {
-            Text(
-                text = item.name ?: "",
-                color = Color.White,
-                modifier = Modifier.padding(top = 10.dp, start = 5.dp)
+                .fillMaxSize()
+                .background(Color(0xff21282d))
+        ) {
+            val imageUrl = item.thumbnail?.path + "/portrait_xlarge.jpg"
+            Log.d("IMAGE_URL", imageUrl)
+            val name = item.name
+            val description = item.description
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(imageUrl.replace("http://", "https://"))
+                    .crossfade(true)
+                    .build(),
+                placeholder = painterResource(R.drawable.kotlin),
+                contentDescription = "character",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(top = 5.dp, start = 5.dp, bottom = 5.dp)
+                    .size(64.dp)
+                    .clip(CircleShape)
+                    .border(1.dp, Color.White, CircleShape)
             )
-            Text(
-                text = item.description ?: "",
-                color = Color.White,
-                modifier = Modifier.padding(top = 10.dp, start = 5.dp)
-            )
+//        Image(
+//            painter = painterResource(R.drawable.kotlin),
+//            contentDescription = "character",
+//            contentScale = ContentScale.Crop,
+//            modifier = Modifier
+//                .padding(top = 5.dp, start = 5.dp)
+//                .size(64.dp)
+//                .clip(CircleShape)
+//                .border(2.dp, Color.Blue, CircleShape)
+//        )
+            Column {
+                Text(
+                    text = name ?: "",
+                    color = Color.White,
+                    modifier = Modifier
+                        .padding(top = 10.dp, start = 5.dp),
+                    fontWeight = FontWeight.Bold,
+                    style = TextStyle(
+                        color = Color.Green,
+                        fontSize = dpToSp(20.dp),
+                        fontFamily = FontFamily.Monospace,
+                    )
+                )
+                Text(
+                    text = description ?: "",
+                    color = Color.White,
+                    modifier = Modifier.padding(top = 10.dp, start = 5.dp)
+
+                )
+            }
         }
     }
 }
