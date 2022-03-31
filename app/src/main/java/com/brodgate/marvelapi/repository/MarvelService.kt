@@ -14,11 +14,7 @@ import kotlinx.serialization.serializer
 object MarvelService {
 
     private val tag = MarvelService::class.java.name
-    private val baseUrl = "gateway.marvel.com"
-//    private val json = Json {
-//        encodeDefaults = true
-//        ignoreUnknownKeys =true
-//    }
+    private const val baseUrl = "gateway.marvel.com"
 
     val httpClient = HttpClient{
         install(ContentNegotiation){
