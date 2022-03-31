@@ -10,7 +10,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -37,6 +38,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.brodgate.marvelapi.R
 import com.brodgate.marvelapi.dpToSp
+import com.brodgate.marvelapi.isScrolledToEnd
 import com.brodgate.marvelapi.model.Result
 
 
@@ -50,16 +52,22 @@ fun CharactersScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val characters = remember { mutableStateListOf<Result>() }
-    var isLoading by remember { mutableStateOf(false) }
-
+    var isCenterLoading by remember { mutableStateOf(false) }
+    var isRowLoading by remember { mutableStateOf(false) }
+    val scrollState = rememberLazyListState()
+    val endOfListReached by remember {
+        derivedStateOf {
+            scrollState.isScrolledToEnd()
+        }
+    }
     LaunchedEffect("effects") {
         viewModel.viewState.collect {
             when (it) {
                 CharacterViewState.Idle -> {
 
                 }
-                is CharacterViewState.IsLoading -> {
-                    isLoading = it.isLoading
+                is CharacterViewState.IsCenterLoading -> {
+                    isCenterLoading = it.isLoading
                 }
                 is CharacterViewState.ShowMessage -> {
                     val message = it.message
@@ -67,8 +75,14 @@ fun CharactersScreen(
                 }
                 is CharacterViewState.CharactersResult -> {
                     if (it.result.isNotEmpty()) {
-                        characters.addAll(it.result)
+                        characters.apply {
+                            clear()
+                            addAll(it.result)
+                        }
                     }
+                }
+                is CharacterViewState.IsRowLoading -> {
+                    isRowLoading = it.isLoading
                 }
             }
         }
@@ -80,10 +94,12 @@ fun CharactersScreen(
             TopBar(viewModel)
         }
     ) {
-        val firstCharMap = characters.groupBy { it.name?.first() }
-        if (isLoading.not()) {
-            AnimatedVisibility (visible = isLoading.not()) {
-                LazyColumn {
+        if (isCenterLoading.not()) {
+            val firstCharMap = characters.groupBy { it.name?.first() }
+            val lastKey = if(firstCharMap.keys.isEmpty()) 0 else firstCharMap.keys.last()
+            val lastItemsSize = firstCharMap[lastKey]?.size ?: 0
+            AnimatedVisibility(visible = isCenterLoading.not()) {
+                LazyColumn(state = scrollState) {
                     firstCharMap.forEach { (initial, groupedChars) ->
                         stickyHeader {
                             Text(
@@ -95,20 +111,28 @@ fun CharactersScreen(
                                     .fillMaxWidth()
                             )
                         }
-                        items(groupedChars) { item ->
+                        itemsIndexed(groupedChars) { i, item ->
                             CharacterRow(item)
+                            if (endOfListReached && !viewModel.isNetworkCallInProgress.value) {
+                                viewModel.getCharacters()
+                            }
                         }
                     }
                 }
+                if (isRowLoading) {
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                        CircularProgressIndicator(color = Color.White)
+                    }
+                }
             }
-        }else{
-            LoadingScreen()
+        } else {
+            CenterLoadingScreen()
         }
     }
 }
 
 @Composable
-fun LoadingScreen() {
+fun CenterLoadingScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -163,16 +187,6 @@ fun CharacterRow(@PreviewParameter(CharacterParams::class) item: Result) {
                     .clip(CircleShape)
                     .border(1.dp, Color.White, CircleShape)
             )
-//        Image(
-//            painter = painterResource(R.drawable.kotlin),
-//            contentDescription = "character",
-//            contentScale = ContentScale.Crop,
-//            modifier = Modifier
-//                .padding(top = 5.dp, start = 5.dp)
-//                .size(64.dp)
-//                .clip(CircleShape)
-//                .border(2.dp, Color.Blue, CircleShape)
-//        )
             Column {
                 Text(
                     text = name ?: "",

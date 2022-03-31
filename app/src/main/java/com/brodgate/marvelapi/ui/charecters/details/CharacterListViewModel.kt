@@ -1,5 +1,6 @@
 package com.brodgate.marvelapi.ui.charecters.details
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brodgate.marvelapi.model.Result
@@ -7,6 +8,7 @@ import com.brodgate.marvelapi.repository.MarvelRepository
 import com.brodgate.marvelapi.repository.ResultState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -26,6 +28,8 @@ class CharacterListViewModel : ViewModel() {
 
     private var offset = 0
 
+    val isNetworkCallInProgress = mutableStateOf(false)
+
     init {
         startFlow()
     }
@@ -35,23 +39,26 @@ class CharacterListViewModel : ViewModel() {
             repository.resultState.collect {
                 when (it) {
                     ResultState.Idle -> {
-                        _viewState.tryEmit(CharacterViewState.IsLoading(true))
+                        _viewState.tryEmit(CharacterViewState.IsCenterLoading(true))
                         repository.getCharacters()
                     }
                     is ResultState.ResultError -> {
                         val errorMsg = it.message
                         sendMessage(errorMsg)
+                        isNetworkCallInProgress.value = false
                     }
                     is ResultState.ResultSuccess -> {
                         characters.addAll(it.results ?: emptyList())
                         withContext(Dispatchers.Main) {
-                            _viewState.tryEmit(CharacterViewState.IsLoading(false))
-                            _viewState.tryEmit(
-                                CharacterViewState.CharactersResult(
-                                    characters.toList()
-                                )
-                            )
-                            offset += 100
+                            _viewState.apply {
+                                tryEmit(CharacterViewState.IsCenterLoading(false))
+                                delay(10)
+                                tryEmit(CharacterViewState.IsRowLoading(false))
+                                delay(10)
+                                tryEmit(CharacterViewState.CharactersResult(characters.toList()))
+                                offset += 100
+                                isNetworkCallInProgress.value = false
+                            }
                         }
                     }
                 }
@@ -64,6 +71,8 @@ class CharacterListViewModel : ViewModel() {
     }
 
     fun getCharacters() {
+        _viewState.tryEmit(CharacterViewState.IsRowLoading(true))
+        isNetworkCallInProgress.value = true
         viewModelScope.launch {
             repository.getCharacters(offset)
         }
