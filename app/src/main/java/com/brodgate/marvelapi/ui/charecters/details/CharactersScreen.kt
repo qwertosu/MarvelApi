@@ -96,8 +96,6 @@ fun CharactersScreen(
     ) {
         if (isCenterLoading.not()) {
             val firstCharMap = characters.groupBy { it.name?.first() }
-            val lastKey = if(firstCharMap.keys.isEmpty()) 0 else firstCharMap.keys.last()
-            val lastItemsSize = firstCharMap[lastKey]?.size ?: 0
             AnimatedVisibility(visible = isCenterLoading.not()) {
                 LazyColumn(state = scrollState) {
                     firstCharMap.forEach { (initial, groupedChars) ->
