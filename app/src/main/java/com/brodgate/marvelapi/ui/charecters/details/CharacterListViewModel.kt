@@ -51,7 +51,10 @@ class CharacterListViewModel : ViewModel() {
                         characters.addAll(it.results ?: emptyList())
                         withContext(Dispatchers.Main) {
                             _viewState.apply {
-                                tryEmit(CharacterViewState.IsCenterLoading(false))
+                                if (!isNetworkCallInProgress.value) {
+                                    tryEmit(CharacterViewState.IsCenterLoading(false))
+                                    delay(10)
+                                }
                                 tryEmit(CharacterViewState.IsRowLoading(false))
                                 tryEmit(CharacterViewState.CharactersResult(characters.toList()))
                                 offset += 100
