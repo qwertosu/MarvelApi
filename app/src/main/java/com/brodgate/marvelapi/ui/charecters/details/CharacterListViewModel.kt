@@ -52,9 +52,7 @@ class CharacterListViewModel : ViewModel() {
                         withContext(Dispatchers.Main) {
                             _viewState.apply {
                                 tryEmit(CharacterViewState.IsCenterLoading(false))
-                                delay(10)
                                 tryEmit(CharacterViewState.IsRowLoading(false))
-                                delay(10)
                                 tryEmit(CharacterViewState.CharactersResult(characters.toList()))
                                 offset += 100
                                 isNetworkCallInProgress.value = false

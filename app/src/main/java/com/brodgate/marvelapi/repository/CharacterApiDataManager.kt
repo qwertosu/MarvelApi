@@ -11,9 +11,11 @@ import kotlinx.coroutines.delay
 
 class CharacterApiDataManager {
 
+    //
+
     companion object {
-        private const val apikey = "4e43f487b31de3161d7144edcdb0c3ba"
-        private const val hash = "a68446ce3ec59800747eebd3c0c0b945"
+        private const val apikey = "360a7db68f03039846e053a6c615ea7a"
+        private const val hash = "d7114228e5923141d133e7f5190e7872"
         const val characterPath = "v1/public/characters"
     }
 
