@@ -1,5 +1,5 @@
 # MarvelApi
-Hello i was added a little project to demonstrate the use of Jetpack Compose and it's 100% kotlin, MVVM/MVI pattern.<br/>
+Hello i was added a little project to demonstrate the use of Jetpack Compose and it's 100% kotlin and using MVVM/MVI pattern.<br/>
 It basically getting data from MarvelApi and displaying it.
 
 Also added a custom pagination to it.
