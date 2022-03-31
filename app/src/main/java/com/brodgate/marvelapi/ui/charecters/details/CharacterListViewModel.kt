@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 class CharacterListViewModel : ViewModel() {
 
     private val _viewState = MutableSharedFlow<CharacterViewState>(
-        replay = 2,
+        replay = 3,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
     val viewState = _viewState.asSharedFlow()
@@ -53,7 +53,6 @@ class CharacterListViewModel : ViewModel() {
                             _viewState.apply {
                                 if (!isNetworkCallInProgress.value) {
                                     tryEmit(CharacterViewState.IsCenterLoading(false))
-                                    delay(10)
                                 }
                                 tryEmit(CharacterViewState.IsRowLoading(false))
                                 tryEmit(CharacterViewState.CharactersResult(characters.toList()))
