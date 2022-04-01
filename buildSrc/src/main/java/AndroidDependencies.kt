@@ -24,6 +24,9 @@ object Versions {
     //DTO
     val kotlinx_serialization_json = "1.1.0"
 
+    //DI
+    val koin_version= "3.1.5"
+
     //Test
     val junit = "4.+"
     val test_ext_junit = "1.1.3"
@@ -59,6 +62,13 @@ object Ktor {
     val serialization = "io.ktor:ktor-serialization:${Versions.ktor_version}"
     val content_negotiation = "io.ktor:ktor-client-content-negotiation:${Versions.ktor_version}"
     val serialization_kotlinx_json = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor_version}"
+}
+
+object Koin{
+    val android = "io.insert-koin:koin-android:${Versions.koin_version}"
+    val nav_graph = "io.insert-koin:koin-androidx-navigation:${Versions.koin_version}"
+    val compose = "io.insert-koin:koin-androidx-compose:${Versions.koin_version}"
+    val ktor = "io.insert-koin:koin-ktor:${Versions.koin_version}"
 }
 
 object Kotlin {

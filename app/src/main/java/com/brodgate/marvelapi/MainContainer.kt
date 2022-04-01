@@ -11,11 +11,11 @@ import com.brodgate.marvelapi.ui.charecters.details.CharactersScreen
 
 
 @Composable
-fun MainContainer(context: Context, viewModel: CharacterListViewModel) {
+fun MainContainer(context: Context) {
     val navController = rememberNavController()
     NavHost(navController, startDestination = NavigationGraph.Route.CHARACTERS_LIST) {
         composable(route = NavigationGraph.Route.CHARACTERS_LIST) {
-            CharactersScreen(context, navController, viewModel)
+            CharactersScreen(context, navController)
         }
     }
 }

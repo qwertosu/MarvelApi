@@ -40,6 +40,7 @@ import com.brodgate.marvelapi.R
 import com.brodgate.marvelapi.dpToSp
 import com.brodgate.marvelapi.isScrolledToEnd
 import com.brodgate.marvelapi.model.Result
+import org.koin.androidx.compose.getViewModel
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -47,7 +48,7 @@ import com.brodgate.marvelapi.model.Result
 fun CharactersScreen(
     context: Context,
     navController: NavController,
-    viewModel: CharacterListViewModel,
+    viewModel: CharacterListViewModel = getViewModel(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
     val scaffoldState = rememberScaffoldState()

@@ -73,7 +73,10 @@ dependencies {
 
     implementation Kotlin.INSTANCE.serialization_json
 
-
+    implementation Koin.INSTANCE.android
+    implementation Koin.INSTANCE.nav_graph
+    implementation Koin.INSTANCE.compose
+    implementation Koin.INSTANCE.ktor
 
 
     testImplementation 'junit:junit:4.+'
