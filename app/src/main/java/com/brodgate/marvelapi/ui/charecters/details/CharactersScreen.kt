@@ -11,7 +11,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -110,7 +109,7 @@ fun CharactersScreen(
                                     .fillMaxWidth()
                             )
                         }
-                        items(items = groupedChars){
+                        items(items = groupedChars) {
                             CharacterRow(it)
                             if (endOfListReached && !viewModel.isNetworkCallInProgress.value) {
                                 viewModel.getCharacters()
@@ -119,7 +118,10 @@ fun CharactersScreen(
                     }
                 }
                 if (isRowLoading) {
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
                         CircularProgressIndicator(color = Color.White)
                     }
                 }
@@ -190,8 +192,7 @@ fun CharacterRow(@PreviewParameter(CharacterParams::class) item: Result) {
                 Text(
                     text = name ?: "",
                     color = Color.White,
-                    modifier = Modifier
-                        .padding(top = 10.dp, start = 5.dp),
+                    modifier = Modifier.padding(top = 10.dp, start = 5.dp),
                     fontWeight = FontWeight.Bold,
                     style = TextStyle(
                         color = Color.Green,

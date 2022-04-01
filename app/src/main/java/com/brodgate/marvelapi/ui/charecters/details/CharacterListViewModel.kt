@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.brodgate.marvelapi.model.Result
 import com.brodgate.marvelapi.repository.MarvelRepository
 import com.brodgate.marvelapi.repository.ResultState
+import com.brodgate.marvelapi.ui.charecters.core.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
@@ -14,13 +15,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CharacterListViewModel : ViewModel() {
-
-    private val _viewState = MutableSharedFlow<CharacterViewState>(
-        replay = 3,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-    val viewState = _viewState.asSharedFlow()
+class CharacterListViewModel : BaseViewModel<CharacterViewState>() {
 
     private val repository = MarvelRepository()
 
