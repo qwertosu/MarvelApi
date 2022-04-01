@@ -8,7 +8,9 @@ This contains the following:<br/>
 * Coroutines
 * Coil for image loading
 * Ktor client for networking
-* kotlinx.serialization.json
+* Koin for Dependency Injection
+* kotlinx.serialization.json for Json serialization
+
 
 Also added a custom pagination.
 
