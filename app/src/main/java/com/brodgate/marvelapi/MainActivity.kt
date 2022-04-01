@@ -11,8 +11,6 @@ import com.brodgate.marvelapi.ui.theme.MarvelApiTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: CharacterListViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
