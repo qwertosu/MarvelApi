@@ -1,17 +1,12 @@
 package com.brodgate.marvelapi.ui.charecters.details
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brodgate.marvelapi.model.Result
 import com.brodgate.marvelapi.repository.MarvelRepository
 import com.brodgate.marvelapi.repository.ResultState
 import com.brodgate.marvelapi.ui.charecters.core.BaseViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -74,6 +69,6 @@ class CharacterListViewModel : BaseViewModel<CharacterViewState>() {
     }
 
     fun sendMessage(msg: String) {
-        _viewState.tryEmit(CharacterViewState.ShowMessage(msg))
+        _viewState.tryEmit(CharacterViewState.ShowToastMessage(msg))
     }
 }

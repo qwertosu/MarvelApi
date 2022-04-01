@@ -70,7 +70,7 @@ fun CharactersScreen(
                 is CharacterViewState.IsCenterLoading -> {
                     isCenterLoading = it.isLoading
                 }
-                is CharacterViewState.ShowMessage -> {
+                is CharacterViewState.ShowToastMessage -> {
                     val message = it.message
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
