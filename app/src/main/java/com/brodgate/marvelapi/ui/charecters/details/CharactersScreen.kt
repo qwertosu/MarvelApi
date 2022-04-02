@@ -178,7 +178,6 @@ fun CharacterRow(@PreviewParameter(CharacterParams::class) item: Result) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(imageUrl.replace("http://", "https://"))
-                    .crossfade(true)
                     .build(),
                 placeholder = painterResource(R.drawable.kotlin),
                 contentDescription = "character",
