@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 
-class MarvelRepository {
+class MarvelRepository  {
 
     private val characterApiDataManager by lazy {
         CharacterApiDataManager()

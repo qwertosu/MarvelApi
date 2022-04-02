@@ -9,11 +9,13 @@ import com.brodgate.marvelapi.ui.charecters.core.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class CharacterListViewModel : BaseViewModel<CharacterViewState>() {
 
-    private val repository = MarvelRepository()
+class CharacterListViewModel : BaseViewModel<CharacterViewState>(), KoinComponent {
 
+    private val repository : MarvelRepository by inject()
     private val characters = mutableSetOf<Result>()
 
     private var offset = 0
